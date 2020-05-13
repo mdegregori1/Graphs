@@ -74,7 +74,7 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        s = stack()
+        s = Stack()
         visited = set()
         # add starting_vertex to queue
         s.push(starting_vertex)
@@ -100,7 +100,16 @@ class Graph:
 
         This should be done using recursion.
         """
+        if visited is None:
+            visited = set()
+        
+        if starting_vertex not in visited:
+            # set as seen in set
+            visited.add(starting_vertex)
+            print(starting_vertex)
 
+            for neighbor in self.get_neighbors(starting_vertex):
+                self.dft_recursive(neighbor, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -108,6 +117,34 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
+        # similar to bft, but must use paths
+        #Create a queue
+        q = Queue()
+        visited = set()
+        q.enqueue([starting_vertex])
+     
+        while q.size() > 0:
+            #Dequeue the first path, and then grab the vertext from the end of the path in order to check for it in the set
+            path = q.dequeue()
+            last_vertex = path[-1]
+            #check if it's been visited
+            if last_vertex not in visited:
+                #add to it
+                visited.add(last_vertex)
+
+                if last_vertex == destination_vertex:
+                    return path
+
+                # add a path to vertex neighbors
+                for neighbor in self.get_neighbors(last_vertex):
+                    #make a copy of the path
+                    path_copy = path.copy()
+                    #append neighbors to new path + enqueue 
+                    path_copy.append(neighbor)
+                    q.enqueue(path_copy)
+
+
+
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -115,6 +152,32 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
+        # similar to bft, but must use paths
+        #Create a queue
+        s = Stack()
+        visited = set()
+        s.push([starting_vertex])
+
+        while s.size() > 0:
+            #pop the first path, and then grab the vertext from the end of the path in order to check for it in the set
+            path = s.pop()
+            last_vertex = path[-1]
+            #check if it's been visited
+            if last_vertex not in visited:
+                #add to it
+                visited.add(last_vertex)
+
+                if last_vertex == destination_vertex:
+                    return path
+
+                # add a path to vertex neighbors
+                for neighbor in self.get_neighbors(last_vertex):
+                    #make a copy of the path
+                    path_copy = path.copy()
+                    #append neighbors to new path + enqueue 
+                    path_copy.append(neighbor)
+                    s.push(path_copy)
+
 
 
     def dfs_recursive(self, starting_vertex, destination_vertex, visited = None, path = None):
@@ -125,6 +188,29 @@ class Graph:
 
         This should be done using recursion.
         """
+        if visited is None:
+            visited = set()
+        if path is None:
+            path = []
+        if starting_vertex not in visited:
+            # set as seen in set
+            visited.add(starting_vertex)
+            # add copy of path
+            path_copy = path.copy()
+            path_copy.append(starting_vertex)
+
+            if starting_vertex == destination_vertex:
+                return path_copy
+
+            for neighbor in self.get_neighbors(starting_vertex):
+                new_path = self.dfs_recursive(neighbor,destination_vertex, visited, path_copy )
+                
+                if new_path is not None:
+                    return new_path
+
+        return None
+
+
 
 
 
