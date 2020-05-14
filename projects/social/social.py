@@ -1,3 +1,6 @@
+import random
+from util import Queue
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -32,33 +35,72 @@ class SocialGraph:
         """
         Takes a number of users and an average number of friendships
         as arguments
-
         Creates that number of users and a randomly distributed friendships
         between those users.
-
         The number of users must be greater than the average number of friendships.
         """
         # Reset graph
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
+   
 
-        # Add users
+        # Add any user
+        for i in range(num_users):
+            self.add_user(f"user {i}")
+        
+        # add users here to show possible friendships
+        possible_friendships= []
+        
+        # Avoid duplicates
+        # how?
+        # make sure the second loop is bigger
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                # adding all to new list
+                possible_friendships.append((user_id, friend_id))
+        # now randomize
+        random.shuffle(possible_friendships)
 
-        # Create friendships
+        # create pairs x, determine by formula (avg_friendships * num_users) //2 -> divide by two because 1 friendship == 2 friendships
+        
+        for i in range(avg_friendships * num_users // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
+    def connections(self, user_id):
+        """
+        Get all neighbors (edges) of a vertex.
+        """
+        return self.friendships[user_id]
+
 
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
-
         Returns a dictionary containing every user in that user's
         extended network with the shortest friendship path between them.
-
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        visited = {} 
+
+        q = Queue()
+        q.enqueue([user_id])
+
+         
+        while q.size() > 0:
+            v = q.dequeue()
+            node = v[-1]
+
+            if node not in visited:
+                neighbors = self.connections(node)
+
+                for neighbor in neighbors:
+                    path_copy = list(v)
+                    path_copy.append(neighbor)
+                    q.enqueue(path_copy)
+                visited[node] = v
+
         return visited
 
 
