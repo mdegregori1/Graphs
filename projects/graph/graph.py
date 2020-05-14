@@ -16,7 +16,6 @@ class Graph:
         """
         self.vertices[vertex_id] = set()
 
-  
 
     def add_edge(self, v1, v2):
         """
@@ -101,6 +100,7 @@ class Graph:
         This should be done using recursion.
         """
         if visited is None:
+            # have to use set
             visited = set()
         
         if starting_vertex not in visited:
@@ -143,7 +143,8 @@ class Graph:
                     path_copy.append(neighbor)
                     q.enqueue(path_copy)
 
-
+# copying paths
+# paths
 
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -265,19 +266,19 @@ if __name__ == '__main__':
     #     1, 2, 4, 7, 6, 3, 5
     #     1, 2, 4, 6, 3, 5, 7
     # '''
-    graph.dft(1)
-    graph.dft_recursive(1)
+    # graph.dft(1)
+    # graph.dft_recursive(1)
 
     # '''
     # Valid BFS path:
     #     [1, 2, 4, 6]
     # '''
-    print(graph.bfs(1, 6))
+    print("bfs:",graph.bfs(1, 6))
 
     # '''
     # Valid DFS paths:
     #     [1, 2, 4, 6]
     #     [1, 2, 4, 7, 6]
-    # '''
-    print(graph.dfs(1, 6))
-    print(graph.dfs_recursive(1, 6))
+    # # '''
+    # print(graph.dfs(1, 6))
+    # print(graph.dfs_recursive(1, 6))
